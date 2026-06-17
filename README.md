@@ -6,7 +6,6 @@ This is a cleaned research fork of the original MATLAB FluxToolbox.
 
 - Added `Plotting/WaveSummaryPlotResearch.m` for the three-panel wavelet flux diagnostic plot.
 - Updated `Wavelets/WaveletFlux.m` to use the research plot when `plotWave` is enabled.
-- Cleaned `quadPlot.m` and translated research comments/messages to English.
 - Allowed `options.nStat = 0` in `ECFlux.m` to skip the stationarity test.
 - Added `.gitignore` so generated data and figures stay out of the code repo.
 
