@@ -35,7 +35,7 @@ function F = ECFlux(data,options)
 %   plotSpectra:     flag for frequency-spectrum plots.                     Default: 0
 %   lagWindow:       Range of lags to look over for max covariance.         Default: [-100 100];
 %   xLag:            lag to apply to x (if not determined automatically).   Default: []
-%   nStat:           number of subsets for stationarity test.               Default: 5
+%   nStat:           number of subsets for stationarity test; use 0 to skip. Default: 5
 %   errMinFreq       lowest frequency to use for error calculations.        Default: 0
 %   errMaxLag        maximum lag to use in error calculation.               Default: floor(N/2)
 %   tauResponse      response time for high-frequency correction.           Default: 0
@@ -224,7 +224,11 @@ wave = WaveletFlux(wdata,gapFill,plotWave,waveParam,scrubGapBound,waveError,errM
 
 %% QUALITY AND CORRECTIONS
 % stationarity
-quality.statTest = stationarityTest(data.t,w_r,x_dtl,nStat);
+if isnumeric(nStat) && isscalar(nStat) && isfinite(nStat) && nStat > 1
+    quality.statTest = stationarityTest(data.t,w_r,x_dtl,nStat);
+else
+    quality.statTest = NaN;
+end
 
 % get autocovariances (for error calculations below)
 [xvar,Elags] = lagCovFFT(x_dtl,x_dtl,[],0,errMinFreq,sampleFreq);

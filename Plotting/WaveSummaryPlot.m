@@ -29,7 +29,7 @@ switch Tunit
         Flab = 'Wave#';
         COI = 1./(W.coi.*mean(W.data.speed)); %from period to wvnm
     otherwise %default is to use time
-        T = W.time;
+        T = W.time/3600;
         Tlab = 'Time';
         F = W.freq;
         Flab = 'Freq';

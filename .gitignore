@@ -1,0 +1,15 @@
+# Generated research data and plots should stay outside the clean toolbox.
+/Dayflux_segment/
+/*.nc
+/subset*.mat
+/*subsetsmall*.mat
+/*.jpg
+/*.tif
+
+# Keep the upstream sample data visible even though other root .mat files are ignored.
+!/exampleData.mat
+
+# MATLAB temporary/autosave files.
+*.asv
+*.m~
+

@@ -129,7 +129,7 @@ ogwx = ogive(f,co);
 %Plot if desired
 if plotSpectra
     [m,i] = max(abs(conb));
-    f53 = abs(f.^(-5/3)./f(i).^(-5/3).*m);
+    f73 = abs(f.^(-7/3)./f(i).^(-7/3).*m);
     
     %separate positive and negative
     pos = con>0;
@@ -144,10 +144,10 @@ if plotSpectra
     h2 = loglog(f(neg),-con(neg),'cx');
     h3 = loglog(fb(posb),conb(posb),'bo','lineWidth',2);
     h4 = loglog(fb(negb),-conb(negb),'rd','lineWidth',2);
-    h5 = loglog(f,f53,'k--');
+    h5 = loglog(f,f73,'k--');
     xlabel('Frequency (Hz)')
     ylabel('w-x Spectral Power')
-    legend([h1 h3 h4 h5],'Data','+ Avg','- Avg','-5/3')
+    legend([h1 h3 h4 h5],'Data','+ Avg','- Avg','-7/3')
     
     figure
     semilogx(f,con.*f,'c-')

@@ -24,14 +24,14 @@ options.despikeFlag     = 0;        %flag for despiking x
 options.xTrendType      = 'smooth'; %mean, linear or smooth
 options.frameSize       = 400;     %frame size for smoothing, # of points
 options.thirdRotation   = 0;        %flag for third wind rotation
-options.plotX           = 1;        %flag for plotting x data
-options.plotW           = 1;        %flag for plotting wind data
-options.plotLag         = 1;        %flag for lag-covariance plot
-options.plotQuad        = 1;        %flag for quadrant plot
-options.plotSpectra     = 1;        %flag for frequency-spectrum plots
-options.nLags           = 1000;     %number of lag points for lag-covariance
+options.plotX           = 0;        %flag for plotting x data
+options.plotW           = 0;        %flag for plotting wind data
+options.plotLag         = 0;        %flag for lag-covariance plot
+options.plotQuad        = 0;        %flag for quadrant plot
+options.plotSpectra     = 0;        %flag for frequency-spectrum plots
+options.nLags           = 0;     %number of lag points for lag-covariance
 options.xLag            = [];       %lag to apply to x (if not determined automatically)
-options.nStat           = 3;        %number of sub-sets for stationarity test
+options.nStat           = 0;        %number of sub-sets for stationarity test; 0 skips this test
 options.plotWave        = 1;        % plot wavelet fluxes
 
 %% STEP 3: CALCULATE FLUXES

@@ -285,6 +285,26 @@ quality.wtime = sqrt(mean((w_recon - w).^2))./sqrt(mean(w.^2))*100; %have to rms
 quality.xtime = sqrt(mean((x_recon - x).^2))./sqrt(mean(x.^2))*100;
 quality.flux  = abs(1 - mean(flux)./wx_cov)*100;
 
+% Correlation between original and wavelet-reconstructed signals.
+idxW = ~isnan(w) & ~isnan(w_recon);
+idxX = ~isnan(x) & ~isnan(x_recon);
+
+if any(idxW)
+    res_w = corrcoef(w(idxW), w_recon(idxW));
+    quality.w_corr = res_w(1,2);
+else
+    quality.w_corr = NaN;
+end
+
+if any(idxX)
+    res_x = corrcoef(x(idxX), x_recon(idxX));
+    quality.x_corr = res_x(1,2);
+else
+    quality.x_corr = NaN;
+end
+
+fprintf('>> Reconstruction correlation: w = %.4f, x = %.4f\n', quality.w_corr, quality.x_corr);
+
 % if quality.wvar > threshold_var, disp([name ' WaveletFlux: original and reconstructed w variance differ by ' num2str(quality.wvar,'%3.0f') '%.']); end
 % if quality.xvar > threshold_var, disp([name ' WaveletFlux: original and reconstructed x variance differ by ' num2str(quality.xvar,'%3.0f') '%.']); end
 % if quality.wtime > threshold_time, disp([name ' WaveletFlux: original and reconstructed w time series differ by ' num2str(quality.wtime,'%3.0f') '%.']); end
@@ -378,12 +398,14 @@ W = struct;
 
 W.data      = data;
 W.time      = time;
+W.w_recon   = w_recon;
+W.x_recon   = x_recon;
 W.dist      = dist;
 W.period    = period;
 W.scale     = scale;
 W.freq      = freq;
 W.coi       = coi;
-W.qcoi   = qcoi;
+W.qcoi      = qcoi;
 W.w_power   = w_power;
 W.x_power   = x_power;
 W.w_psd     = w_psd;
@@ -403,20 +425,44 @@ W.flux_err  = flux_err;
 W.param     = param;
 W.og        = og;
 W.og_fft    = og_fft;
-W.flux_nocoi= flux_nocoi;
-W.flux_avg_nocoi  = mean(flux_nocoi,'omitnan');
+W.flux_nocoi = flux_nocoi;
+W.flux_avg_nocoi = mean(flux_nocoi,'omitnan');
 W.co_nocoi  = co_nocoi;
 W.og_nocoi  = og_nocoi;
 W.quality   = quality;
 
-W.x_wave = x_wave;
-W.w_wave = w_wave;
+W.x_wave    = x_wave;
+W.w_wave    = w_wave;
 
+W.EC_flux   = wx_cov;
+
+coi_impacted = qcoi > 0.5;
+W.impacted_time_percent = mean(coi_impacted, 'omitnan') * 100;
+
+total_abs_flux = sum(abs(W.flux), 'omitnan');
+nocoi_abs_flux = sum(abs(W.flux_nocoi), 'omitnan');
+if total_abs_flux == 0
+    energy_loss_percent = NaN;
+else
+    energy_loss_percent = (1 - nocoi_abs_flux / total_abs_flux) * 100;
+end
+
+if isempty(name)
+    fprintf('Segment: unnamed\n');
+else
+    fprintf('Segment: %s\n', name);
+end
+fprintf('>> COI-filtered absolute flux energy loss: %.2f%%\n', energy_loss_percent);
+fprintf('>> Mean qcoi (COI-influenced energy fraction): %.2f%%\n', mean(qcoi, 'omitnan') * 100);
+
+W.Total_Abs_Flux = total_abs_flux;
+W.Nocoi_Abs_Flux = nocoi_abs_flux;
+W.Energy_Loss_Percentage = energy_loss_percent;
 % W = orderfields(W);
 
 %% PLOTS
 if plotMe
-    WaveSummaryPlot(W,name);
+    WaveSummaryPlotResearch(W,name);
 end
 
 
